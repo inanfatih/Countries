@@ -9,6 +9,8 @@ import com.minan.countries.R
 import com.minan.countries.adapter.CountryAdapter.CountryViewHolder
 import com.minan.countries.databinding.ItemCountryBinding
 import com.minan.countries.model.Country
+import com.minan.countries.util.downloadFromUrl
+import com.minan.countries.util.placeholderProgressBar
 import com.minan.countries.view.FeedFragmentDirections
 
 class CountryAdapter(val countryList: ArrayList<Country>): RecyclerView.Adapter<CountryViewHolder>() {
@@ -30,6 +32,8 @@ class CountryAdapter(val countryList: ArrayList<Country>): RecyclerView.Adapter<
             val action = FeedFragmentDirections.actionFeedFragmentToCountryFragment()
             Navigation.findNavController(it).navigate(action)
         }
+
+        holder.binding.imageView.downloadFromUrl(countryList[position].imageUrl, placeholderProgressBar(holder.view.context))
     }
 
     override fun getItemCount(): Int {

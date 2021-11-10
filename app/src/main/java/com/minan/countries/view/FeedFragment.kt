@@ -1,5 +1,6 @@
 package com.minan.countries.view
 
+import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.minan.countries.adapter.CountryAdapter
 import com.minan.countries.databinding.FragmentFeedBinding
+import com.minan.countries.util.myExtension
 import com.minan.countries.viewmodel.FeedViewModel
 
 class FeedFragment : Fragment() {
@@ -32,7 +34,6 @@ class FeedFragment : Fragment() {
     ): View? {
         viewModel = ViewModelProviders.of(this).get(FeedViewModel::class.java)
         binding = FragmentFeedBinding.inflate(inflater, container, false)
-        observeLiveData()
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -45,7 +46,19 @@ class FeedFragment : Fragment() {
         binding.countryList.layoutManager = LinearLayoutManager(context)
         binding.countryList.adapter = countryAdapter
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.countryList.visibility = View.GONE
+            binding.countryError.visibility = View.GONE
+            binding.countryLoading.visibility = View.VISIBLE
+            binding.swipeRefreshLayout.isRefreshing = false
+            viewModel.refreshData()
+        }
 
+        // myExtension olusturmustuk, asagidaki sekilde kullanabiliyoruz.
+        val haydar = "Haydar"
+        haydar.myExtension("Haydariye")
+
+        observeLiveData()
 //        binding.button.setOnClickListener {
 //            val action = FeedFragmentDirections.actionFeedFragmentToCountryFragment()
 //            Navigation.findNavController(it).navigate(action)
